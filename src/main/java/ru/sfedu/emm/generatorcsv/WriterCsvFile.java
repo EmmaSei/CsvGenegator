@@ -5,12 +5,13 @@
  */
 package ru.sfedu.emm.generatorcsv;
 
+import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
+
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class WriterCsvFile {
@@ -29,13 +30,26 @@ public class WriterCsvFile {
 
     public void writeCustomers(int recordNum) throws Exception {
         for (int i = 0; i < recordNum; i++) {
-
+            List<String[]> allLines = new ArrayList<>();
             String nameCustomer = randomCustomer() + "";
+            try {
+                FileReader filereader = new FileReader(nameCustomer+".csv");
+                CSVReader csvReader = new CSVReader(filereader);
+                String[] nextRecord;
+                while ((nextRecord = csvReader.readNext()) != null) {
+                    allLines.add(nextRecord);
+                }
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
             CSVWriter writer = new CSVWriter(new FileWriter(nameCustomer + ".csv"));
             //Create record
             String[] record = {randomNum(100, 1000) + "", randomDate(), "City" + randomNum(1, 100) + " Street" + randomNum(1, 100) + " " + randomNum(1, 100)};
             //Write the record to file
-            writer.writeNext(record);
+            allLines.add(record);
+            writer.writeAll(allLines);
+            //writer.writeNext(record);
             //close the writer
             writer.close();
         }

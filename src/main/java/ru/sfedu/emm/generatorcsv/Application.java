@@ -14,6 +14,6 @@ public class Application {
     public static void main(String[] args) throws Exception {
         WriterCsvFile csvFile = new WriterCsvFile();
         csvFile.writeCustomers("customer.csv", 10);
-        csvFile.writeCustomers(2);
+        csvFile.writeCustomers(50);
     }
 }
