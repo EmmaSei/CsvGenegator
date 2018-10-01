@@ -17,25 +17,29 @@ import java.util.concurrent.ThreadLocalRandom;
 public class WriterCsvFile {
 
     public void writeCustomers(String fileName, int recordNum) throws Exception {
-        CSVWriter writer = new CSVWriter(new FileWriter(fileName));
+        CSVWriter writer = new CSVWriter(new FileWriter("C:/input_csv/"+fileName));
+
+        List<String[]> allLines = new ArrayList<>();
+        allLines.add(new String[]{"accountName","traffic", "date","city", "street", "homeNumber"});
         for (int i = 0; i < recordNum; i++) {
             //Create record
             String[] record = {randomCustomer() + "", randomNum(100, 1000) + "", randomDate(), "City" + randomNum(1, 100), "Street" + randomNum(1, 100), randomNum(1, 100) + ""};
-            //Write the record to file
-            writer.writeNext(record);
+            allLines.add(record);
         }
-        //close the writer
+        writer.writeAll(allLines);
         writer.close();
     }
 
     public void writeCustomers(int recordNum) throws Exception {
         for (int i = 0; i < recordNum; i++) {
             List<String[]> allLines = new ArrayList<>();
+            allLines.add(new String[]{"traffic", "date","address"});
             String nameCustomer = randomCustomer() + "";
             try {
-                FileReader filereader = new FileReader(nameCustomer+".csv");
+                FileReader filereader = new FileReader("C:/input_csv/"+nameCustomer+".csv");
                 CSVReader csvReader = new CSVReader(filereader);
                 String[] nextRecord;
+                csvReader.readNext();
                 while ((nextRecord = csvReader.readNext()) != null) {
                     allLines.add(nextRecord);
                 }
@@ -43,7 +47,7 @@ public class WriterCsvFile {
             catch (Exception e) {
                 e.printStackTrace();
             }
-            CSVWriter writer = new CSVWriter(new FileWriter(nameCustomer + ".csv"));
+            CSVWriter writer = new CSVWriter(new FileWriter("C:/input_csv/"+nameCustomer + ".csv"));
             //Create record
             String[] record = {randomNum(100, 1000) + "", randomDate(), "City" + randomNum(1, 100) + " Street" + randomNum(1, 100) + " " + randomNum(1, 100)};
             //Write the record to file
